@@ -1,11 +1,14 @@
 import React from 'react';
 import './App.css';
 
-const Card = () => {
-  return <div className="">
-    <div>
-      <div></div>
-      <div></div>
+const Card = (props) => {
+  return <div className="card">
+    <div className="container">
+      <div className="front">
+        {props.symbol}
+        {props.number}
+      </div>
+      <div className="back"></div>
     </div>
   </div>
 
@@ -13,33 +16,38 @@ const Card = () => {
 
 class Deck extends React.Component{
 
-  state = {
-    cards: []
+  constructor(props) {
+    super(props);
+    this.state = {
+      cards: []
+    }
   }
 
   componentDidMount() {
     (async () => {
-      let cards = await (await fetch(`http://localhost:4001/${this.props.path}`)).json();
-      this.setState({cards});
+      setTimeout( async () => {
+        let cards = await (await fetch(`http://localhost:4001/${this.props.path}`)).json();
+        this.setState({cards});
+      },2000);
     })();
   }
 
   render() {
     return <div>
-      <h3>{this.props.title}</h3>
-      <div className="deck">{ JSON.stringify(this.state.cards) }</div>
+      { (this.state.cards.length === 0) ? <div>Loading...</div> :
+          <div>
+            <h3>{this.props.title}</h3>
+            <div className="deck">{
+              this.state.cards.map((card, index) => {
+                const number = card.slice(0, -1);
+                const symbol = card.slice(-1);
+                return <Card symbol={symbol} number={number} key={index}/>
+              })
+            }</div>
+          </div>
+      }
     </div>;
   }
-
-  /**constructor(props){
-    super(props);
-    (async () => {
-      const cards = fetch(`http://localhost:4001/${props.path}`).then(data => data.json().then(data => {
-        console.log(props.path, cards);
-      }));
-      console.log(`http://localhost:4001/${props.path}`, this.props.title, cards)
-    })();
-  }**/
 
 }
 
