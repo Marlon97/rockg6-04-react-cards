@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './App.css';
 
 const CardCorner = (props) => {
@@ -10,13 +10,12 @@ const CardCorner = (props) => {
 
 const CardSymbols = (props) => {
   const isNumber = !isNaN(props.number);
-  console.log(props.number + " es " + isNumber)
   return <div className="symbols">
     {
       (props.number === 'A') ? <div>{props.symbol}</div> :
       (
         isNumber ? new Array(parseInt(props.number)).fill(props.symbol).map(
-            (cardSymbol, index) => <div key={index}>{cardSymbol}</div>
+            (cardSymbol, id) => <div key={id.toString()}>{cardSymbol}</div>
         ):
         (
           ['J','Q','K'].includes(props.number)? (<div className='image'></div>) : ''
@@ -34,11 +33,16 @@ const CardFront = (props) => {
   </div>
 }
 
+const CardBack = () => {
+  return <div className="back"></div>
+}
+
 const Card = (props) => {
-  return <div className={"card"+(props.flipped?" flipped":"")} symbol={props.symbol} number={props.number} >
+  const [isFlipped, setIsFlipped] = useState(props.flipped);
+  return <div className={["card", (isFlipped ? "flipped" : "")].filter(Boolean).join(" ")} symbol={props.symbol} number={props.number} key={props.index} onClick={() => {setIsFlipped(!isFlipped)}} >
     <div className="container">
       <CardFront symbol={props.symbol} number={props.number}/>
-      <div className="back"></div>
+      <CardBack />
     </div>
   </div>
 }
@@ -70,7 +74,7 @@ class Deck extends React.Component{
               this.state.cards.map((card, index) => {
                 const number = card.slice(0, -1);
                 const symbol = card.slice(-1);
-                return <Card symbol={symbol} number={number} flipped={index<this.props.flipped} />
+                return <Card symbol={symbol} number={number} index={index} flipped={index<this.props.flipped} />
               })
             }</div>
           </div>
