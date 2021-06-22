@@ -1,17 +1,46 @@
 import React from 'react';
 import './App.css';
 
+const CardCorner = (props) => {
+  return <div className="card-corner">
+    <div>{props.number}</div>
+    <div>{props.symbol}</div>
+  </div>
+}
+
+const CardSymbols = (props) => {
+  const isNumber = !isNaN(props.number);
+  console.log(props.number + " es " + isNumber)
+  return <div className="symbols">
+    {
+      (props.number === 'A') ? <div>{props.symbol}</div> :
+      (
+        isNumber ? new Array(parseInt(props.number)).fill(props.symbol).map(
+            (cardSymbol, index) => <div key={index}>{cardSymbol}</div>
+        ):
+        (
+          ['J','Q','K'].includes(props.number)? (<div className='image'></div>) : ''
+        )
+      )
+    }
+  </div>
+}
+
+const CardFront = (props) => {
+  return <div className="front">
+    <CardCorner symbol={props.symbol} number={props.number} />
+    <CardSymbols symbol={props.symbol} number={props.number}/>
+    <CardCorner symbol={props.symbol} number={props.number} />
+  </div>
+}
+
 const Card = (props) => {
   return <div className="card" symbol={props.symbol} number={props.number}>
     <div className="container">
-      <div className="front">
-        {props.symbol}
-        {props.number}
-      </div>
+      <CardFront symbol={props.symbol} number={props.number}/>
       <div className="back"></div>
     </div>
   </div>
-
 }
 
 class Deck extends React.Component{
@@ -58,8 +87,8 @@ function App() {
     <div className="App">
       <header className="App-header">
         <h1>Deck.js React Version</h1>
-        <Deck title="Table" path="table"></Deck>
-        <Deck title="Hand" path="deck/2"></Deck>
+        <Deck title="Table" path="table" flipped={2}></Deck>
+        <Deck title="Hand" path="deck/2" flipped={2}></Deck>
       </header>
     </div>
   );
