@@ -23,7 +23,8 @@ html{
 }
 
 body{
-  background-color: #929292;
+  background-image: url('./bg-carta-ficha.gif');
+  background-size: cover;
   color: white;
   display: flex;
   flex-direction: column;
