@@ -35,7 +35,7 @@ const CardFront = (props) => {
 }
 
 const Card = (props) => {
-  return <div className="card" symbol={props.symbol} number={props.number}>
+  return <div className={"card"+(props.flipped?" flipped":"")} symbol={props.symbol} number={props.number} >
     <div className="container">
       <CardFront symbol={props.symbol} number={props.number}/>
       <div className="back"></div>
@@ -70,7 +70,7 @@ class Deck extends React.Component{
               this.state.cards.map((card, index) => {
                 const number = card.slice(0, -1);
                 const symbol = card.slice(-1);
-                return <Card symbol={symbol} number={number} key={index}/>
+                return <Card symbol={symbol} number={number} flipped={index<this.props.flipped} />
               })
             }</div>
           </div>
