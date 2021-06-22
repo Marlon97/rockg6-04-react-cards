@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 
 const Card = (props) => {
-  return <div className="card">
+  return <div className="card" symbol={props.symbol} number={props.number}>
     <div className="container">
       <div className="front">
         {props.symbol}
@@ -36,7 +36,7 @@ class Deck extends React.Component{
     return <div>
       { (this.state.cards.length === 0) ? <div>Loading...</div> :
           <div>
-            <h3>{this.props.title}</h3>
+            <h2>{this.props.title}</h2>
             <div className="deck">{
               this.state.cards.map((card, index) => {
                 const number = card.slice(0, -1);
@@ -57,6 +57,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
+        <h1>Deck.js React Version</h1>
         <Deck title="Table" path="table"></Deck>
         <Deck title="Hand" path="deck/2"></Deck>
       </header>
